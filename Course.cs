@@ -39,9 +39,10 @@ namespace site_coursara_3._1
         public static void AddCourse()
         {
             Course obj = new Course();
-            Console.Write("Name:");
+            courses.Add(obj);
             while (true)
             {
+                Console.Write("Name:");
                 string x = Console.ReadLine();
                 if (x != "")
                 {
@@ -49,9 +50,9 @@ namespace site_coursara_3._1
                     break;
                 }
             }
-            Console.Write("Id:");
             while (true)
             {
+                Console.Write("Id:");
                 string x = Console.ReadLine();
                 if (x != "")
                 {
@@ -66,16 +67,23 @@ namespace site_coursara_3._1
                     }
                 }
             }
-            Console.Write("Course kind(1. Free, 2. Premium, 3. Special):");
             while (true)
             {
+                Console.Write("Course kind(1. Free, 2. Premium, 3. Special):");
                 string x = Console.ReadLine();
                 if (x != "")
                 {
                     try
                     {
-                        obj.CourseKind = (User.MemberKind)(int.Parse(x) - 1);
-                        break;
+                        if ((int.Parse(x)) > 0 && (int.Parse(x) < 3))
+                        {
+                            obj.CourseKind = (User.MemberKind)(int.Parse(x) - 1);
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Enter a number between 1 and 2");
+                        }
                     }
                     catch
                     {
@@ -83,9 +91,9 @@ namespace site_coursara_3._1
                     }
                 }
             }
-            Console.Write("Teachers:");
             while (true)
             {
+                Console.Write("Teachers:");
                 string x = Console.ReadLine();
                 if (x != "")
                 {
@@ -95,8 +103,26 @@ namespace site_coursara_3._1
                     {
                         obj.Teachers.Add(teacher);
                     }
+                    break;
 
                 }
+            }
+        }
+        public static void EditCourse(int Id)
+        {
+            int t = 0;
+            foreach (Course course in courses)
+            {
+                if (course.Id == Id)
+                {
+                    course.EditCourse();
+                    t = 1;
+                    break;
+                }
+            }
+            if (t == 0)
+            {
+                Console.WriteLine("Could not find such an Id");
             }
         }
         public void EditCourse()
@@ -112,23 +138,50 @@ namespace site_coursara_3._1
             {
                 Name = x;
             }
-
-            Console.Write("Enter Course Kind(1. Free, 2. Premium, 3. Special): ");
-            x = Console.ReadLine();
-            if (x == "")
+            while (true)
             {
+                Console.Write("Enter Course Kind(1. Free, 2. Premium, 3. Special): ");
+                x = Console.ReadLine();
+                if (x == "")
+                {
 
+                }
+                else
+                {
+                    try
+                    {
+                        if ((int.Parse(x)) > 0 && (int.Parse(x) < 4))
+                        {
+                            CourseKind = (User.MemberKind)(int.Parse(x)-1);
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Please enter a number between 1 and 3");
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                }
             }
-            else
+        }
+        public static void AddInstructor(int Id)
+        {
+            int t = 0;
+            foreach (Course course in courses)
             {
-                try
+                if (course.Id == Id)
                 {
-                    CourseKind = (User.MemberKind)(int.Parse(x));
+                    course.AddInstructor();
+                    t = 1;
+                    break;
                 }
-                catch
-                {
-
-                }
+            }
+            if (t == 0)
+            {
+                Console.WriteLine("Could not find such an Id");
             }
         }
         public void AddInstructor()
@@ -150,6 +203,36 @@ namespace site_coursara_3._1
                 {
                     Teachers.Add(teacher);
                 }
+            }
+        }
+        public static void RemoveInstructor(int Id)
+        {
+            int t = 0;
+            foreach (Course course in courses)
+            {
+                if (course.Id == Id)
+                {
+                    t = 1;
+                    while (true)
+                    {
+                        Console.Write("Name: ");
+                        string Name = Console.ReadLine();
+                        if (Name != "")
+                        {
+                            course.RemoveInstructor(Name);
+                        }
+                        else
+                        {
+                            break;
+                        }
+
+                    }
+                    break;
+                }
+            }
+            if (t == 0)
+            {
+                Console.WriteLine("Could not find such an Id");
             }
         }
         public void RemoveInstructor(string name)
@@ -198,21 +281,32 @@ namespace site_coursara_3._1
             }
             return null;
         }
-        public void RemoveCourse(int course_id)
+        public static void RemoveCourse(int course_id)
         {
             int t = 0;
             for (int i = 0; i < courses.Count; i++)
             {
-                if(courses[i].Id == course_id)
+                if (courses[i].Id == course_id)
                 {
                     t = 1;
                     courses.RemoveAt(i);
                 }
             }
-            if(t == 1)
+            if (t == 0)
             {
                 Console.WriteLine("Could not find this id");
             }
+        }
+        public static string GiveLicense(int Id)
+        {
+            foreach (var course in courses)
+            {
+                if (course.Id == Id)
+                {
+                    return $"{course.Name}";
+                }
+            }
+            return null;
         }
     }
 }
